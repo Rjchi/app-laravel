@@ -6,8 +6,9 @@
     <title>APP | {{ $title ?? 'Defecto' }}</title>
 </head>
 <body>
-    <h1>----------</h1>
-    {{ $slot }}
-    {{ $sum }}
+    <x-navigation />
+    <hr>
+    {{ $slot ?? ''}}
+    {{ $sum  ?? ''}}
 </body>
 </html>
