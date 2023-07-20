@@ -3,6 +3,14 @@
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
+/**
+ * Para ver las rutas que tenemos en nuestra aplicacion utilizamos:
+ * php artisan route:list
+ *
+ * Las rutas que reciben parametros variables deben ir al final de todas las demas rutas
+ * para evitar que nos genere un 404
+ */
+
 /*
 
 $posts = [
@@ -21,7 +29,22 @@ Route::view('/', 'welcome')->name('home');
 
 // Para controladores de mas de un metodo esta es la sintaxis:
 // 1ero el controlador 2do el metodo del controlador
-Route::get('/blog', [PostController::class, 'index'])->name('blog');
+Route::get('/blog', [PostController::class, 'index'])->name('posts/index');
+
+// Create es para mostrar el formulario
+Route::get('/blog/create-post', [PostController::class, 'create'])->name('posts/create');
+
+// Store es para almacenar los datos del formulario
+Route::post('/blog', [PostController::class, 'store'])->name('posts/store');
+
+Route::patch('/blog/{postId}', [PostController::class, 'update'])->name('posts/update');
+
+/**
+ * Uso de parametros de rutas
+ * el postId lo recibimos como parametro del metodo show
+ */
+Route::get('/blog/{postId}', [PostController::class, 'show'])->name('posts/show');
+Route::get('/blog/{postId}/edit', [PostController::class, 'edit'])->name('posts/edit');
 
 // Para pasar datos a una vista podemos hacer uso del tercer parametro de view
 
