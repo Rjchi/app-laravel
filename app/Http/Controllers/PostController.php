@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 // Siempre debemos importar el modelo que vamos a utilizar:
+
+use App\Http\Requests\SavePostRequest;
 use App\Models\Post;
 
 use Illuminate\Http\Request;
@@ -43,19 +45,21 @@ class PostController extends Controller
 
     public function create()
     {
-        return view('posts/create');
+        return view('posts/create', ['post' => new Post]);
     }
 
-    // Este seria el create
-    public function store(Request $request)
+    // Este seria el create y utilizamos el savePost... que creamos con las validaciones
+    // Con esto podemos quitar la validacion de abajo
+    public function store(SavePostRequest $request)
     {
         // Validamos los datos del formulario
-        $request->validate([
-            'title' => ['required'],
-            'body' => ['required'],
-        ], [
-            'title.required' => 'El campo :attribute es requerido.'
-        ]);
+        // $validated = $request->validate([
+        //     'title' => ['required'],
+        //     'body' => ['required'],
+        // ], [
+        //     'title.required' => 'El campo :attribute es requerido.'
+        // ]);
+        /*
         $post = new Post;
 
         // Con request() obtenemos todos los datos que fueron mandados del formulario o lo podemos
@@ -70,6 +74,23 @@ class PostController extends Controller
         $post->body = $request->input('body');
 
         $post->save();
+        */
+
+        /**
+         * En caso de que no queramos crear el post de la manera anterior
+         * Podemos utilizar el ORM asi:
+         * recibe los campos que se van a ingresar en la base de datos
+         * con esto creamos el dato en la base de datos
+         */
+
+        Post::create(
+            //     [
+            //     'title' => $request->input('title'),
+            //     'body' => $request->input('body'),
+            // ]
+            // $validated
+            $request->validated()
+        );
 
         // Mensajes de sesion:
         session()->flash('status', 'Post created!');
@@ -89,33 +110,37 @@ class PostController extends Controller
     // Este tambien seria el edit
     public function update(Request $request, Post $postId)
     {
-        // Validamos los datos del formulario
-        $request->validate([
-            'title' => ['required'],
+        // Validamos los datos del formulario o encapsulamos la logica de validacion con el comando de abajo
+        $validated = $request->validate([
+            'title' => ['required', 'min:4'],
             'body' => ['required'],
         ], [
             'title.required' => 'El campo :attribute es requerido.'
         ]);
-
-        // Con request() obtenemos todos los datos que fueron mandados del formulario o lo podemos
-
-        // obtener directamente desde los parametros esta es la forma recomendada
-        // return $request;
-
-        // Si queremos acceder al valor de un campo en especifico podemos hacerlo asi:
-        // return $request->input('title');
-
+        /*
         $postId->title = $request->input('title');
         $postId->body = $request->input('body');
 
         $postId->save();
+        */
 
-        // Mensajes de sesion:
-        session()->flash('status', 'Post updated!');
+        /**
+         * Utilizamos el metodo update del ORM con los campos que queremos actualizar
+         * y en vez de pasar los campos uno por uno le pasamos lo que devuelve la validacion
+         * anterior
+         *$postId->update([
+         *'title' => $request->input('title'),
+         *'body' => $request->input('body'),
+         *]);
+         */
+        $postId->update($validated);
 
-        // Redirigimos (la forma recendada de redirigir es la segunda)
+        // Mensajes de sesion o lo utilizamos directamente en el return:
+        // session()->flash('status', 'Post updated!');
+
+        // Redirigimos (la forma recomendada de redirigir es la segunda)
         // return redirect() -> route('posts/index');
-        return to_route('posts/show', $postId);
+        return to_route('posts/show', $postId)->with('status', 'Post update!');
     }
 }
 
@@ -144,4 +169,7 @@ class PostController extends Controller
  * Para eliminar utilizamos:
  * $variableNueva::find(id)
  * $variableNueva->delete()
+ *
+ * Para encapsular la logica de la validacion utilizamos
+ * php artisan make:request SavePostRequest
  */
