@@ -38,6 +38,7 @@ Route::get('/blog/create-post', [PostController::class, 'create'])->name('posts/
 Route::post('/blog', [PostController::class, 'store'])->name('posts/store');
 
 Route::patch('/blog/{postId}', [PostController::class, 'update'])->name('posts/update');
+Route::delete('/blog/{postId}', [PostController::class, 'destroy'])->name('posts/destroy');
 
 /**
  * Uso de parametros de rutas
@@ -65,4 +66,15 @@ Route::get('/blog/{postId}/edit', [PostController::class, 'edit'])->name('posts/
      return view('blog', ['posts' => $posts]);
  }) -> name('blog');
 
+ */
+
+/**
+ * verificar hasta que sea correctas las rutas con:
+ *php artisan route:list --path=blog
+ * PARA AHORRARNOS TODO LO ANTERIOR PODEMOS HACER ESTO:
+ * Route::resource('blog', PostController::class, [
+ *'names'=> 'posts',
+ *'parameters'=> ['blog' => 'post']
+ *]);
+ * Esto responde a todas las rutas anteriormente creadas
  */

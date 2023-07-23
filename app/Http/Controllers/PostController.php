@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+// Usar el comando con los 7 metodos rest preferiblemente
+
 // Siempre debemos importar el modelo que vamos a utilizar:
 
 use App\Http\Requests\SavePostRequest;
@@ -140,7 +142,13 @@ class PostController extends Controller
 
         // Redirigimos (la forma recomendada de redirigir es la segunda)
         // return redirect() -> route('posts/index');
-        return to_route('posts/show', $postId)->with('status', 'Post update!');
+        return to_route('posts/show', $postId)->with('status', 'Post updated!');
+    }
+
+    public function destroy(Post $postId) {
+        $postId -> delete();
+
+        return to_route('posts/index')-> with('status', 'Post Deleted!');
     }
 }
 
