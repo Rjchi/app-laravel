@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\AuthenticatedSessionController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
@@ -41,9 +43,17 @@ Route::patch('/blog/{postId}', [PostController::class, 'update'])->name('posts/u
 Route::delete('/blog/{postId}', [PostController::class, 'destroy'])->name('posts/destroy');
 
 // Ruta login para probar la proteccion de las rutas:
-Route::get('/login', function () {
-    return 'Login page';
-})->name('login');
+// Route::get('/login', function () {
+//     return 'Login page';
+// })->name('login');
+
+Route::view('/login', 'auth.login')->name('login');
+Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+
+Route::view('/register', 'auth.register')->name('register');
+Route::post('/register', [RegisteredUserController::class, 'store']);
 
 /**
  * Uso de parametros de rutas
