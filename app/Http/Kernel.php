@@ -53,6 +53,9 @@ class Kernel extends HttpKernel
      * @var array<string, class-string|string>
      */
     protected $middlewareAliases = [
+        // auth - guest los podemos modificar segun nuestras necesidades
+        // auth inpide el acceso si no estas autenticado
+        // y el guest si estas autenticado no te deja pasar
         'auth' => \App\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'auth.session' => \Illuminate\Session\Middleware\AuthenticateSession::class,

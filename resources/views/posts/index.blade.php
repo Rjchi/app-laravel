@@ -1,6 +1,9 @@
 <x-app title="Blog">
-    <h3>Para inspeccionar datos utilizamos @ dump(Nombre de la variable)</h3>
-    @dump($posts)
+    <h2 style="color: red">Si no estas autenticado no te muestra el ejemplo del dump gracias a blade y la directiva auth</h2>
+    @auth
+        <h3>Para inspeccionar datos utilizamos @ dump(Nombre de la variable)</h3>
+        @dump($posts)
+    @endauth
     <hr>
     <a href="{{ route('posts/create') }}">Create new post</a>
     <hr>

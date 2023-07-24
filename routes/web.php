@@ -40,10 +40,17 @@ Route::post('/blog', [PostController::class, 'store'])->name('posts/store');
 Route::patch('/blog/{postId}', [PostController::class, 'update'])->name('posts/update');
 Route::delete('/blog/{postId}', [PostController::class, 'destroy'])->name('posts/destroy');
 
+// Ruta login para probar la proteccion de las rutas:
+Route::get('/login', function () {
+    return 'Login page';
+})->name('login');
+
 /**
  * Uso de parametros de rutas
  * el postId lo recibimos como parametro del metodo show
+ * y uso del middleware para proteccion de rutas
  */
+// Route::get('/blog/{postId}', [PostController::class, 'show'])->name('posts/show')->middleware('auth');
 Route::get('/blog/{postId}', [PostController::class, 'show'])->name('posts/show');
 Route::get('/blog/{postId}/edit', [PostController::class, 'edit'])->name('posts/edit');
 
